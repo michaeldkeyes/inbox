@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: inbox-app
   security:
     oauth2:
       client:
@@ -6,3 +8,23 @@ spring:
           github:
             client-id: ${CLIENT_ID}
             client-secret: ${CLIENT_SECRET}
+  data:
+    cassandra:
+      keyspace-name: main
+      username: ${USERNAME}
+      password: ${PASSWORD}
+      schema-action: recreate-drop-unused
+      request:
+        timeout: 10s
+      connection:
+        connect-timeout: 10s
+        init-query-timeout: 10s
+
+astra.db:
+  id: ${ASTRA_ID}
+  region: us-east1
+  keyspace: main
+  application.token: ${APPLICATION_TOKEN}
+
+datastax.astra:
+  secure-connect-bundle: secure-connect.zip
