@@ -9,18 +9,26 @@ import org.springframework.data.cassandra.core.mapping.Table;
 public class Folder {
 
   @PrimaryKeyColumn(name = "user_id", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
-  private String userId;
+  private String id;
   @PrimaryKeyColumn(name = "label", ordinal = 1, type = PrimaryKeyType.CLUSTERED)
   private String label;
   @CassandraType(type = CassandraType.Name.TEXT)
   private String color;
 
-  public String getUserId() {
-    return userId;
+  public Folder() {}
+
+  public Folder(String id, String label, String color) {
+    this.id = id;
+    this.label = label;
+    this.color = color;
   }
 
-  public void setUserId(String userId) {
-    this.userId = userId;
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String userId) {
+    this.id = userId;
   }
 
   public String getLabel() {
