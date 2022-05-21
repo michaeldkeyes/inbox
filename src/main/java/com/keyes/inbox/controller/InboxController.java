@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Date;
 import java.util.List;
@@ -32,7 +33,8 @@ public class InboxController {
   }
 
   @GetMapping("/")
-  public String homePage(@AuthenticationPrincipal OAuth2User principal, Model model) {
+  public String homePage(@RequestParam(required = false) String folder,
+                         @AuthenticationPrincipal OAuth2User principal, Model model) {
 
     if (principal == null || !StringUtils.hasText(principal.getAttribute("name"))) {
       return "index";
@@ -47,8 +49,11 @@ public class InboxController {
     model.addAttribute("defaultFolders", defaultFolders);
 
     // Fetch messages
+    if (!StringUtils.hasText(folder)) {
+      folder = "inbox";
+    }
     String folderLabel = "Inbox";
-    List<EmailListItem> emailList = emailListItemRepository.findAllByKey_IdAndKey_Label(userId, folderLabel);
+    List<EmailListItem> emailList = emailListItemRepository.findAllByKey_IdAndKey_Label(userId, folder);
     PrettyTime p = new PrettyTime();
 
     emailList.forEach(emailItem -> {
@@ -57,6 +62,7 @@ public class InboxController {
       emailItem.setAgoTimeString(p.format(emailDateTime));
     });
     model.addAttribute("emailList", emailList);
+    model.addAttribute("folderName", folder);
 
     return "inbox";
 
